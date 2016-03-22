@@ -155,7 +155,13 @@ class ScreenshotTaker {
 			final boolean timedOut = SystemClock.uptimeMillis() > endTime;
 
 			if (timedOut){
-				return null;
+				// added by liuxiao 如果一直获取不到decorView，则获取最上层的view
+				ArrayList<View> views = viewFetcher.getViews(null, true);
+				if (views != null && views.size() > 0) {
+					return views.get(0);
+				} else {
+					return null;
+				}
 			}
 			sleeper.sleepMini();
 			decorView = viewFetcher.getRecentDecorView(viewFetcher.getWindowDecorViews());
