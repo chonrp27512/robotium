@@ -3273,6 +3273,31 @@ public class Solo {
 		
 		return webUtils.getWebElements(false);
 	}
+	
+	/**
+	 * hook the active WebView
+	 * @return 
+	 */
+	
+	public boolean hookAllWebElements(){
+		if(config.commandLogging){
+			Log.d(config.commandLoggingTag, "hookAllWebElements");
+		}
+		return webUtils.hookAllWebElements();
+	}
+	
+	/**
+	 * Returns an ArrayList of operated WebElements in the active WebView.
+	 * @param javaScriptIsExcuted
+	 * @return Returns an ArrayList of operated WebElements in the active WebView.
+	 */
+	
+	public ArrayList<WebElement> getOperatedWebElements(boolean javaScriptIsExcuted){
+		if(config.commandLogging){
+			Log.d(config.commandLoggingTag, "hookAllWebElements");
+		}
+		return webUtils.getOperatedWebElements(javaScriptIsExcuted);
+	}
 
 	/**
 	 * Returns an ArrayList of all the WebElements displayed in the active WebView matching the specified By object.

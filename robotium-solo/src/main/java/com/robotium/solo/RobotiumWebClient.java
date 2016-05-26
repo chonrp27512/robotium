@@ -1,9 +1,11 @@
 package com.robotium.solo;
 
 import java.util.List;
+
 import android.app.Instrumentation;
 import android.graphics.Bitmap;
 import android.os.Message;
+import android.util.Log;
 import android.view.View;
 import android.webkit.ConsoleMessage;
 import android.webkit.GeolocationPermissions;
@@ -62,24 +64,27 @@ class RobotiumWebClient extends WebChromeClient{
 	}
 
 	/**
-	 * Overrides onJsPrompt in order to create {@code WebElement} objects based on the web elements attributes prompted by the injections of JavaScript
+	 * Overrides onJsPrompt in order to create {@code WebElement} objects based on 
+	 * 		the web elements attributes prompted by the injections of JavaScript
 	 */
 
 	@Override
 	public boolean onJsPrompt(WebView view, String url, String message,	String defaultValue, JsPromptResult r) {
 		
-		if(message != null && (message.contains(";,") || message.contains("robotium-finished"))){
-	
+		if(message != null && (message.contains(";,")
+				|| message.contains(";___,")
+				|| message.contains("robotium-finished"))) {
+			
 			if(message.equals("robotium-finished")){
 				webElementCreator.setFinished(true);
-			}
-			else{
+			} else if (message.contains(";___,")) {
+				webElementCreator.createWebElementAndAddInList(message, view, 1);
+			} else {
 				webElementCreator.createWebElementAndAddInList(message, view);
 			}
 			r.confirm();
 			return true;
-		}
-		else {
+		} else {
 			if(originalWebChromeClient != null) {
 				return originalWebChromeClient.onJsPrompt(view, url, message, defaultValue, r); 
 			}
