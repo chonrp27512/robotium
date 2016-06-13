@@ -1446,6 +1446,23 @@ public class Solo {
 	}
 
 	/**
+	 * Clicks the specified View at the given location
+	 *
+	 * @param view the {@link View} to click
+	 * @param xScale left-start horizontal percentage of view
+	 * @param yScale top-start vertical percentage of view
+	 */
+	
+	public void clickOnView(View view, float xScale, float yScale) {
+		if(config.commandLogging){
+			Log.d(config.commandLoggingTag, "clickOnView("+view+")");
+		}
+		
+		view = waiter.waitForView(view, Timeout.getSmallTimeout());
+		clicker.clickOnScreen(view, xScale, yScale);
+	}
+	
+	/**
 	 * Clicks the specified View.
 	 *
 	 * @param view the {@link View} to click
