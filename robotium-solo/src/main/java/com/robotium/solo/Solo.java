@@ -1513,6 +1513,24 @@ public class Solo {
 		clicker.clickOnScreen(view, true, time);
 
 	}
+	
+	/**
+	 * Long clicks the specified View at the given location for a specified amount of time.
+	 *
+	 * @param view the {@link View} to click
+	 * @param time the amount of time to long click
+	 * @param xScale left-start horizontal percentage of view
+	 * @param yScale top-start vertical percentage of view
+	 */
+	
+	public void clickLongOnView(View view, int time, float xScale, float yScale) {
+		if(config.commandLogging){
+			Log.d(config.commandLoggingTag, "clickLongOnView("+view+", "+time+")");
+		}
+		
+		view = waiter.waitForView(view, Timeout.getSmallTimeout());
+		clicker.clickOnScreen(view, true, time, xScale, yScale);
+	}
 
 	/**
 	 * Clicks a View or WebElement displaying the specified
