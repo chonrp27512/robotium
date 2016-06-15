@@ -65,7 +65,7 @@ class Getter {
 		T viewToReturn = (T) waiter.waitForText(classToFilterBy, text, 0, Timeout.getSmallTimeout(), false, onlyVisible, false);
 
 		if(viewToReturn == null)
-			Assert.fail(classToFilterBy.getSimpleName() + " with text: '" + text + "' is not found!");
+			Assert.fail(String.format("包含文本[%s]的控件[%s]不存在", classToFilterBy.getSimpleName(), text));
 
 		return viewToReturn;
 	}

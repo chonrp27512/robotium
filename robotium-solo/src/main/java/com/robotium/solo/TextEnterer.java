@@ -96,7 +96,7 @@ class TextEnterer{
 				}
 			}
 			if(!successfull) {
-				Assert.fail("Text can not be typed!");
+				Assert.fail(String.format("文本框[%s]中无法输入文本", editText.toString()));
 			}
 		}
 	}

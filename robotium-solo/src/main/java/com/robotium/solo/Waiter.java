@@ -663,7 +663,7 @@ class Waiter {
 				Assert.fail(match + " " + classToFilterBy.getSimpleName() +"s" + " are not found!");
 			}
 			else {
-				Assert.fail(classToFilterBy.getSimpleName() + " is not found!");
+				Assert.fail(String.format("控件[%s]不存在", classToFilterBy.getSimpleName()));
 			}
 		}
 		views = null;

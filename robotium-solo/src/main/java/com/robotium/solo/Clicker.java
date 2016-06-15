@@ -104,7 +104,8 @@ class Clicker {
 			}
 		}
 		if(!successfull) {
-			Assert.fail("Click at ("+x+", "+y+") can not be completed! ("+(ex != null ? ex.getClass().getName()+": "+ex.getMessage() : "null")+")");
+			Log.e(LOG_TAG, "Click at ("+x+", "+y+") can not be completed! ("+(ex != null ? ex.getClass().getName()+": "+ex.getMessage() : "null")+")");
+			Assert.fail(String.format("无法完成坐标[%s, %s]上的点击，该位置上可能有其他应用", x, y));
 		}
 	}
 
@@ -143,7 +144,8 @@ class Clicker {
 			}
 		}
 		if(!successfull) {
-			Assert.fail("Long click at ("+x+", "+y+") can not be completed! ("+(ex != null ? ex.getClass().getName()+": "+ex.getMessage() : "null")+")");
+			Log.e(LOG_TAG, "Long Click at ("+x+", "+y+") can not be completed! ("+(ex != null ? ex.getClass().getName()+": "+ex.getMessage() : "null")+")");
+			Assert.fail(String.format("无法完成坐标[%s, %s]上的长按，该位置上可能有其他应用", x, y));
 		}
 
 		eventTime = SystemClock.uptimeMillis();
@@ -197,7 +199,7 @@ class Clicker {
 	
 	public void clickOnScreen(View view, boolean longClick, int time, float xScale, float yScale) {
 		if(view == null)
-			Assert.fail("View is null and can therefore not be clicked!");
+			Assert.fail("控件不存在");
 
 		float[] xyToClick = getClickCoordinates(view, xScale, yScale);
 		float x = xyToClick[0];
@@ -291,7 +293,7 @@ class Clicker {
 		try{
 			inst.sendKeyDownUpSync(KeyEvent.KEYCODE_DPAD_DOWN);
 		}catch(SecurityException e){
-			Assert.fail("Can not press the context menu!");
+			Assert.fail("无法点击菜单");
 		}
 		for(int i = 0; i < index; i++)
 		{
@@ -313,7 +315,7 @@ class Clicker {
 				sender.sendKeyCode(KeyEvent.KEYCODE_MENU);
 				dialogUtils.waitForDialogToOpen(WAIT_TIME, true);
 			}catch(SecurityException e){
-				Assert.fail("Can not open the menu!");
+				Assert.fail("无法打开菜单");
 			}
 		}
 	}
@@ -351,7 +353,7 @@ class Clicker {
 				sender.sendKeyCode(KeyEvent.KEYCODE_MENU);
 				dialogUtils.waitForDialogToOpen(WAIT_TIME, true);
 			}catch(SecurityException e){
-				Assert.fail("Can not open the menu!");
+				Assert.fail("无法打开菜单");
 			}
 		}
 		boolean textShown = waiter.waitForText(text, 1, WAIT_TIME, true) != null;
@@ -479,7 +481,7 @@ class Clicker {
 		else {
 
 			if(match > 1){
-				Assert.fail(match + " matches of text string: '" + regex +  "' are not found!");
+				Assert.fail(String.format("第%s个匹配字符串[%s]的文本不存在", match, regex));
 			}
 
 			else{
@@ -490,7 +492,7 @@ class Clicker {
 					Log.d(LOG_TAG, "'" + regex + "' not found. Have found: '" + textView.getText() + "'");
 				}
 				allTextViews = null;
-				Assert.fail("Text string: '" + regex + "' is not found!");
+				Assert.fail(String.format("文本[%s]不存在", regex));
 			}
 		}
 	}
@@ -562,7 +564,7 @@ class Clicker {
 		final AbsListView absListView = waiter.waitForAndGetView(index, AbsListView.class);
 		
 		if(absListView == null)
-			Assert.fail("AbsListView is null!");
+			Assert.fail("列表控件[AbsListView]找不到");
 
 		failIfIndexHigherThenChildCount(absListView, lineIndex, endTime);
 		
@@ -609,7 +611,7 @@ class Clicker {
 		ViewGroup recyclerView = viewFetcher.getRecyclerView(recyclerViewIndex, Timeout.getSmallTimeout());
 		
 		if(recyclerView == null){
-			Assert.fail("RecyclerView is not found!");
+			Assert.fail("RecyclerView控件找不到");
 		}
 		else{
 			failIfIndexHigherThenChildCount(recyclerView, itemIndex, endTime);
@@ -653,7 +655,7 @@ class Clicker {
 		while(view == null){
 			final boolean timedOut = SystemClock.uptimeMillis() > endTime;
 			if (timedOut){
-				Assert.fail("View is null and can therefore not be clicked!");
+				Assert.fail(String.format("第%s个列表的第%s个子控件不存在", index+1, lineIndex+1));
 			}
 			
 			sleeper.sleep();
@@ -683,7 +685,7 @@ class Clicker {
 		while(view == null){
 			final boolean timedOut = SystemClock.uptimeMillis() > endTime;
 			if (timedOut){
-				Assert.fail("View is null and can therefore not be clicked!");
+				Assert.fail(String.format("第%s个RecyclerView的第%s个子控件不存在", recyclerViewIndex+1, itemIndex+1));
 			}
 
 			sleeper.sleep();
