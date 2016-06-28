@@ -4,7 +4,9 @@ import java.util.ArrayList;
 import java.util.Hashtable;
 import java.util.List;
 import java.util.concurrent.CopyOnWriteArrayList;
+
 import android.os.SystemClock;
+import android.util.Log;
 import android.webkit.WebView;
 
 /**
@@ -18,6 +20,7 @@ import android.webkit.WebView;
 class WebElementCreator {
 
 	private List<WebElement> webElements;
+	private List<WebElement> wes;
 	private Sleeper sleeper;
 	private boolean isFinished = false;
 
@@ -31,6 +34,7 @@ class WebElementCreator {
 	public WebElementCreator(Sleeper sleeper){
 		this.sleeper = sleeper;
 		webElements = new CopyOnWriteArrayList<WebElement>();
+		wes = new CopyOnWriteArrayList<WebElement>();
 	}
 
 	/**
@@ -40,6 +44,7 @@ class WebElementCreator {
 	public void prepareForStart(){
 		setFinished(false);
 		webElements.clear();
+		wes.clear();
 	}
 
 	/**
@@ -47,10 +52,18 @@ class WebElementCreator {
 	 * 
 	 * @return an {@code ArrayList} of {@code TextView} objects based on the web elements shown
 	 */
-
 	public ArrayList<WebElement> getWebElementsFromWebViews(){
 		waitForWebElementsToBeCreated();
 		return new ArrayList<WebElement>(webElements);
+	}
+	
+	/**
+	 * Returns an {@code ArrayList} of {@code TextView} objects based on the web elements be operated
+	 * @return an {@code ArrayList} of {@code TextView} objects based on the web elements be operated
+	 */
+	public ArrayList<WebElement> getWebElementsBeOperated() {
+		waitForWebElementsToBeCreated();
+		return new ArrayList<WebElement>(wes);
 	}
 
 	/**
@@ -74,21 +87,32 @@ class WebElementCreator {
 		this.isFinished = isFinished;
 	}
 
+	public void createWebElementAndAddInList(String webData, WebView webView){
+		createWebElementAndAddInList(webData, webView, 0);
+	}
+	
 	/**
 	 * Creates a {@ WebElement} object from the given text and {@code WebView}
 	 * 
 	 * @param webData the data of the web element 
 	 * @param webView the {@code WebView} the text is shown in
+	 * @param type
+	 * 		type is 0 --> add web element 
+	 * 		type is 1 --> add operated web element
 	 */
 
-	public void createWebElementAndAddInList(String webData, WebView webView){
+	public void createWebElementAndAddInList(String webData, WebView webView, int type){
 
-		WebElement webElement = createWebElementAndSetLocation(webData, webView);
+		WebElement webElement = createWebElementAndSetLocation(webData, webView, type);
 
 		if((webElement!=null)) 
-			webElements.add(webElement);
+			if (type == 0) {
+				webElements.add(webElement);
+			} else if (type == 1) {
+				wes.add(webElement);
+			}
 	}
-
+	
 	/**
 	 * Sets the location of a {@code WebElement} 
 	 * 
@@ -117,12 +141,16 @@ class WebElementCreator {
 	 * 
 	 * @param information the data of the web element
 	 * @param webView the web view the text is shown in
-	 * 
+	 * @param type 
+	 * 		type is 0 --> message separator : ";,"
+	 * 		type is 0 --> message separator : ";___,"
 	 * @return a {@code WebElement} object with a given text and location
 	 */
 
-	private WebElement createWebElementAndSetLocation(String information, WebView webView){
-		String[] data = information.split(";,");
+	private WebElement createWebElementAndSetLocation(String information, WebView webView, int type){
+		String separator = ";,";
+		separator = type == 0 ? separator : ";___,";
+		String[] data = information.split(separator);
 		String[] elements = null;
 		int x = 0;
 		int y = 0;
@@ -157,7 +185,7 @@ class WebElementCreator {
 
 		return webElement;
 	}
-
+	
 	/**
 	 * Waits for {@code WebElement} objects to be created
 	 * 

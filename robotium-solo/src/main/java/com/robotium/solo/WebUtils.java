@@ -7,8 +7,11 @@ import java.io.InputStreamReader;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.regex.Pattern;
+
 import com.robotium.solo.Solo.Config;
+
 import android.app.Instrumentation;
+import android.util.Log;
 import android.webkit.WebChromeClient;
 import android.webkit.WebView;
 import android.widget.TextView;
@@ -93,6 +96,30 @@ class WebUtils {
 		boolean javaScriptWasExecuted = executeJavaScriptFunction("allWebElements();");
 		
 		return getWebElements(javaScriptWasExecuted, onlySufficientlyVisible);
+	}
+	
+	/**
+	 * hook WebElements
+	 * @return boolean: is javaScript executed success?
+	 */
+	public boolean hookAllWebElements() {
+		return executeJavaScriptFunction("hook();");
+	}
+	
+	/**
+	 * Returns an ArrayList of WebElements currently operated in the active WebView
+	 * @param javaScriptWasExecuted
+	 * @return an {@code ArrayList} of the {@link WebElement} objects been operated in the active WebView
+	 */
+	public ArrayList<WebElement> getOperatedWebElements(boolean javaScriptWasExecuted) {
+		ArrayList<WebElement> webElements = new ArrayList<WebElement>();
+
+		if(javaScriptWasExecuted){
+			for(WebElement webElement : webElementCreator.getWebElementsBeOperated()){
+				webElements.add(webElement);
+			}
+		}
+		return webElements;
 	}
 
 	/**

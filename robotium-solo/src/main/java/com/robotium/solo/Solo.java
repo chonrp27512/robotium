@@ -1446,6 +1446,23 @@ public class Solo {
 	}
 
 	/**
+	 * Clicks the specified View at the given location
+	 *
+	 * @param view the {@link View} to click
+	 * @param xScale left-start horizontal percentage of view
+	 * @param yScale top-start vertical percentage of view
+	 */
+	
+	public void clickOnView(View view, float xScale, float yScale) {
+		if(config.commandLogging){
+			Log.d(config.commandLoggingTag, "clickOnView("+view+")");
+		}
+		
+		view = waiter.waitForView(view, Timeout.getSmallTimeout());
+		clicker.clickOnScreen(view, xScale, yScale);
+	}
+	
+	/**
 	 * Clicks the specified View.
 	 *
 	 * @param view the {@link View} to click
@@ -1495,6 +1512,24 @@ public class Solo {
 		
 		clicker.clickOnScreen(view, true, time);
 
+	}
+	
+	/**
+	 * Long clicks the specified View at the given location for a specified amount of time.
+	 *
+	 * @param view the {@link View} to click
+	 * @param time the amount of time to long click
+	 * @param xScale left-start horizontal percentage of view
+	 * @param yScale top-start vertical percentage of view
+	 */
+	
+	public void clickLongOnView(View view, int time, float xScale, float yScale) {
+		if(config.commandLogging){
+			Log.d(config.commandLoggingTag, "clickLongOnView("+view+", "+time+")");
+		}
+		
+		view = waiter.waitForView(view, Timeout.getSmallTimeout());
+		clicker.clickOnScreen(view, true, time, xScale, yScale);
 	}
 
 	/**
@@ -3272,6 +3307,31 @@ public class Solo {
 		}
 		
 		return webUtils.getWebElements(false);
+	}
+	
+	/**
+	 * hook the active WebView
+	 * @return 
+	 */
+	
+	public boolean hookAllWebElements(){
+		if(config.commandLogging){
+			Log.d(config.commandLoggingTag, "hookAllWebElements");
+		}
+		return webUtils.hookAllWebElements();
+	}
+	
+	/**
+	 * Returns an ArrayList of operated WebElements in the active WebView.
+	 * @param javaScriptIsExcuted
+	 * @return Returns an ArrayList of operated WebElements in the active WebView.
+	 */
+	
+	public ArrayList<WebElement> getOperatedWebElements(boolean javaScriptIsExcuted){
+		if(config.commandLogging){
+			Log.d(config.commandLoggingTag, "hookAllWebElements");
+		}
+		return webUtils.getOperatedWebElements(javaScriptIsExcuted);
 	}
 
 	/**

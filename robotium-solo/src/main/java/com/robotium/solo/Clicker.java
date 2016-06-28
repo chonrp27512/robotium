@@ -170,6 +170,18 @@ class Clicker {
 	public void clickOnScreen(View view) {
 		clickOnScreen(view, false, 0);
 	}
+	
+	/**
+	 * Clicks on a given {@link View}, at the given location
+	 *
+	 * @param view the view that should be clicked
+	 * @param xScale horizontal percentage of view
+	 * @param yScale vertical percentage of view
+	 */
+	
+	public void clickOnScreen(View view, float xScale, float yScale) {
+		clickOnScreen(view, false, 0, xScale, yScale);
+	}
 
 	/**
 	 * Private method used to click on a given view.
@@ -180,10 +192,14 @@ class Clicker {
 	 */
 
 	public void clickOnScreen(View view, boolean longClick, int time) {
+		clickOnScreen(view, longClick, time, 0.5f, 0.5f);
+	}	
+	
+	public void clickOnScreen(View view, boolean longClick, int time, float xScale, float yScale) {
 		if(view == null)
 			Assert.fail("View is null and can therefore not be clicked!");
 
-		float[] xyToClick = getClickCoordinates(view);
+		float[] xyToClick = getClickCoordinates(view, xScale, yScale);
 		float x = xyToClick[0];
 		float y = xyToClick[1];
 
@@ -194,7 +210,7 @@ class Clicker {
 			} catch (Exception ignored){}
 
 			if(view != null){
-				xyToClick = getClickCoordinates(view);
+				xyToClick = getClickCoordinates(view, xScale, yScale);
 				x = xyToClick[0];
 				y = xyToClick[1];
 			}
@@ -231,9 +247,35 @@ class Clicker {
 		return xyToClick;
 	}
 	
+	/**
+	 * Returns click coordinates for the specified view.
+	 * 
+	 * @param view the view to get click coordinates from
+	 * @param xScale, the scale to left when 0.5 is the horizontal center
+	 * @param yScale, the scale to top when 0.5 is the vertical center
+	 * @return click coordinates for a specified view
+	 */
 	
+	private float[] getClickCoordinates(View view, float xScale, float yScale){
+		sleeper.sleep(200);
+		xScale = (xScale > 0.99f || xScale < 0.01f) ? 0.5f : xScale;
+		yScale = (yScale > 0.99f || yScale < 0.01f) ? 0.5f : yScale;
+		int[] xyLocation = new int[2];
+		float[] xyToClick = new float[2];
 
+		view.getLocationOnScreen(xyLocation);
 
+		final int viewWidth = view.getWidth();
+		final int viewHeight = view.getHeight();
+		final float x = xyLocation[0] + (viewWidth * xScale);
+		float y = xyLocation[1] + (viewHeight * yScale);
+
+		xyToClick[0] = x;
+		xyToClick[1] = y;
+
+		return xyToClick;
+	}
+	
 	/**
 	 * Long clicks on a specific {@link TextView} and then selects
 	 * an item from the context menu that appears. Will automatically scroll when needed.
