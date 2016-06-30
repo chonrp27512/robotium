@@ -74,24 +74,28 @@ class ScreenshotTaker {
 	 * @param quality the compression rate. From 0 (compress for lowest size) to 100 (compress for maximum quality).
 	 */
 	public void takeScreenshot(final String name, final int quality) {
-		View decorView = getScreenshotView();
-		if(decorView == null) 
-			return;
-
-		initScreenShotSaver();
-		ScreenshotRunnable runnable = new ScreenshotRunnable(decorView, name, quality);
-
-		synchronized (screenshotMutex) {
-			Activity activity = activityUtils.getCurrentActivity(false);
-			if(activity != null)
-				activity.runOnUiThread(runnable);
-			else
-				instrumentation.runOnMainSync(runnable);
-
-			try {
-				screenshotMutex.wait(TIMEOUT_SCREENSHOT_MUTEX);
-			} catch (InterruptedException ignored) {
+		try {
+			View decorView = getScreenshotView();
+			if(decorView == null) 
+				return;
+	
+			initScreenShotSaver();
+			ScreenshotRunnable runnable = new ScreenshotRunnable(decorView, name, quality);
+	
+			synchronized (screenshotMutex) {
+				Activity activity = activityUtils.getCurrentActivity(false);
+				if(activity != null)
+					activity.runOnUiThread(runnable);
+				else
+					instrumentation.runOnMainSync(runnable);
+	
+				try {
+					screenshotMutex.wait(TIMEOUT_SCREENSHOT_MUTEX);
+				} catch (InterruptedException ignored) {
+				}
 			}
+		} catch(Throwable e) {
+			Log.e("OrangeSoloRecord", "takeScreenshot exception: " + e.getMessage());
 		}
 	}
 
