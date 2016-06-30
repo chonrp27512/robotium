@@ -57,7 +57,7 @@ class Asserter {
 
 	public void assertCurrentActivity(String message, Class<? extends Activity> expectedClass) {
 		if(expectedClass == null){
-			Assert.fail("The specified Activity is null!");
+			Assert.fail("指定的Activity不存在");
 		}
 
 		boolean foundActivity = waiter.waitForActivity(expectedClass);
@@ -125,7 +125,7 @@ class Asserter {
 	public void assertMemoryNotLow() {
 		ActivityManager.MemoryInfo mi = new ActivityManager.MemoryInfo();
 		((ActivityManager)activityUtils.getCurrentActivity().getSystemService("activity")).getMemoryInfo(mi);
-		Assert.assertFalse("Low memory available: " + mi.availMem + " bytes!", mi.lowMemory);
+		Assert.assertFalse("可用内存低: " + mi.availMem + " bytes!", mi.lowMemory);
 	}
 
 }

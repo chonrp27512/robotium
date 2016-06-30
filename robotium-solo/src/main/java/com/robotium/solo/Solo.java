@@ -1278,7 +1278,7 @@ public class Solo {
 		}
 		
 		if(webElement == null)
-			Assert.fail("WebElement is null and can therefore not be clicked!");
+			Assert.fail("WebElement不存在");
 
 		clicker.clickOnScreen(webElement.getLocationX(), webElement.getLocationY(), null);
 	}
@@ -2701,7 +2701,7 @@ public class Solo {
 		}
 		
 		if(waiter.waitForWebElement(by, 0, Timeout.getSmallTimeout(), false) == null) {
-			Assert.fail("WebElement with " + webUtils.splitNameByUpperCase(by.getClass().getSimpleName()) + ": '" + by.getValue() + "' is not found!");
+			Assert.fail(String.format("WebElement中的文本[%s]找不到", text));
 		}
 		webUtils.enterTextIntoWebElement(by, text);
 	}
@@ -3057,10 +3057,10 @@ public class Solo {
 
 			int match = index + 1;
 			if(match > 1){
-				Assert.fail(match + " Views with id: '" + id + "', resource name: '" + resourceName + "' are not found!");
+				Assert.fail(String.format("第%s的控件[id/%s]不存在", match, resourceName));
 			}
 			else {
-				Assert.fail("View with id: '" + id + "', resource name: '" + resourceName + "' is not found!");
+				Assert.fail(String.format("控件[id/%s]不存在", resourceName));
 			}
 		}
 		return viewToReturn;
@@ -3141,10 +3141,10 @@ public class Solo {
 		if(viewToReturn == null) {
 			int match = index + 1;
 			if(match > 1){
-				Assert.fail(match + " Views with id: '" + id + "' are not found!");
+				Assert.fail(String.format("第%s的控件[id/%s]不存在", match, id));
 			}
 			else {
-				Assert.fail("View with id: '" + id + "' is not found!");
+				Assert.fail(String.format("控件[id/%s]不存在", id));
 			}
 		}
 		return viewToReturn;
@@ -3207,7 +3207,7 @@ public class Solo {
 		final WebView webView = waiter.waitForAndGetView(0, WebView.class);
 
 		if(webView == null)
-			Assert.fail("WebView is not found!");
+			Assert.fail("WebView找不到");
 
 		instrumentation.runOnMainSync(new Runnable() {
 			public void run() {

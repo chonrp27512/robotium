@@ -324,7 +324,7 @@ class Scroller {
 
 	public <T extends AbsListView> void scrollListToLine(final T view, final int line){
 		if(view == null)
-			Assert.fail("AbsListView is null!");
+			Assert.fail("列表控件[AbsListView]找不到");
 
 		final int lineToMoveTo;
 		if(view instanceof GridView) {
