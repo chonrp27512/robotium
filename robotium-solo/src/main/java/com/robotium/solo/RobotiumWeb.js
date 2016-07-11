@@ -326,7 +326,7 @@ function hook() {
 	for (var i = 0, max = es.length; i < max; i++) {
 		element = es[i];
 		if (true/*(element.tagName != 'DIV') || (typeof (element.onclick) != "undefined")*/) {
-			element.onclick = function test() {
+			element.addEventListener('click', function (e) {
 				var stepArr = {};
 				if (!e) {
 					var e = window.event;
@@ -337,7 +337,7 @@ function hook() {
 				elem = e.target;
 				promptOperatedElement(elem);
 				finished();
-			};
+			}, false)
 		}
 	}
 }
